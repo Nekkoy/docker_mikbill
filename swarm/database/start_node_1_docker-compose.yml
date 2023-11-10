@@ -1,0 +1,47 @@
+version: '3.9'
+
+services:
+  node1:
+    hostname: node1
+    image: nekkoy/database:latest
+    environment:
+      - TZ=Europe/Kiev
+      - CLUSTER_NAME=MikbillCluster
+      - MYSQL_ROOT_PASSWORD=mikbill
+      - MYSQL_ROOT_HOST=mysql_balancer
+      - MYSQL_USER=mikbill
+      - MYSQL_PASSWORD=mikbill
+      - MYSQL_DATABASE=mikbill
+      - CLUSTER_JOIN=arbitrator
+      - CLUSTER_ADDRESS=node1,node2,
+    volumes:
+      - cluster_node1:/var/lib/mysql
+    networks:
+      - cluster_network
+    entrypoint: ["/init.sh"]
+    command: --default-time-zone='Europe/Kiev'
+    configs:
+      - source: cluster_init_script
+        target: /init.sh
+        mode: 0777
+      - source: cluster_node_config
+        target: /etc/node.cnf
+    restart: unless-stopped
+    deploy:
+      placement:
+        constraints:
+          - node.hostname==mb-database
+
+configs:
+  cluster_node_config:
+    file: files/node_cluster.cnf
+  cluster_init_script:
+    file: files/init.sh
+
+volumes:
+  cluster_node1:
+
+networks:
+  cluster_network:
+    external: true
+    name: cluster_network

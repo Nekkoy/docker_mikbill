@@ -1,0 +1,21 @@
+version: '3.9'
+
+services:
+  arbitrator:
+    hostname: arbitrator
+    image: nekkoy/arbitrator:latest
+    environment:
+      - TZ=Europe/Kiev
+    command: garbd -g "MikbillCluster" -a "gcomm://node1,node2," -o "evs.keepalive_period=PT3S;evs.inactive_check_period=PT10S;evs.suspect_timeout=PT30S;evs.inactive_timeout=PT1M;evs.install_timeout=PT1M"
+    networks:
+      - cluster_network
+    restart: unless-stopped
+    deploy:
+      placement:
+        constraints:
+          - node.hostname==mb-database
+
+networks:
+  cluster_network:
+    external: true
+    name: cluster_network
