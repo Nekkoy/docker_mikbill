@@ -4,7 +4,7 @@
 
 Неофіційний спосіб запуску [mikbill](https://mikbill.pro) у середовищі докера
 
-+ [compose](compose/README.ua.md) - односерверне рішенн
++ [compose](compose/README.ua.md) - односерверне рішення
 + [swarm](swarm/README.ua.md) - кластерна версія
 
 [Створіть власні контейнери](https://github.com/Nekkoy/docker_mikbill_containers)<br>
