@@ -2,15 +2,7 @@
 [![ua](https://img.shields.io/badge/lang-ua-yellow.svg)](README.ua.md)
 [![ru](https://img.shields.io/badge/lang-ru-blue.svg)](README.ru.md)
 
-This solution was used on two physical servers combined into one cluster via docker swarm<br>
-5 nodes participated in the project
-  + mb-admin
-  + mb-auth
-  + mb-database
-  + mb-lk
-  + mb-payments
-
-The mikbill product has been divided into modules
+Single server solution<br>
 
 # List of Modules
 
