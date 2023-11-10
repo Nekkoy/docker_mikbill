@@ -9,7 +9,6 @@ docker-compose.yaml состоит из
   + mikbill_kernel — обрабатывает запрос от radius_server
 
 ### Конфигурация
-  + files/nginx.conf — конфигурация nginx для приема запросов auth/acct для радиуса
   + files/sql.conf — файл конфигурации radius для подключения к базе
 
 ### Сети
