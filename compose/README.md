@@ -3,6 +3,11 @@
 [![ru](https://img.shields.io/badge/lang-ru-blue.svg)](README.ru.md)
 
 Single server solution<br>
+But since configs are used, you need to create a docker swarm:
+
+```
+docker swarm init
+```
 
 # List of Modules
 
