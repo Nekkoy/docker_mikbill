@@ -22,7 +22,7 @@ docker-compose.yaml состоит из
 
 ```
 docker network create --driver=overlay --scope=swarm --attachable -o "com.docker.network.bridge.enable_ip_masquerade"="false" cabinet_network
-сеть docker create --driver=overlay --scope=swarm --attachable -o "com.docker.network.bridge.enable_ip_masquerade"="false" database_network
+docker network create --driver=overlay --scope=swarm --attachable -o "com.docker.network.bridge.enable_ip_masquerade"="false" database_network
 ```
 
 ### Создание контейнера новой версии
