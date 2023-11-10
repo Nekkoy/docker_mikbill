@@ -24,15 +24,3 @@ Required networks
 docker network create --driver=overlay --scope=swarm --attachable -o "com.docker.network.bridge.enable_ip_masquerade"="false" cabinet_network
 docker network create --driver=overlay --scope=swarm --attachable -o "com.docker.network.bridge.enable_ip_masquerade"="false" database_network
 ```
-
-### Creating a new version container
-
-> [!IMPORTANT]
-> Its requeue you have own docker registry or docker hub account
-
-Download the files of the required version from mikbill and place them in build/files<br>
-Enter build directory and run the command:
-```
-docker build -t USERNAME/cabinet:VERSION -f container.dockerfile .
-docker push USERNAME/cabinet:VERSION
-```

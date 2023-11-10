@@ -21,16 +21,3 @@ docker-compose.yaml складається з
 docker network create --driver=overlay --scope=swarm --attachable -o "com.docker.network.bridge.enable_ip_masquerade"="false" cabinetapi_network
 docker network create --driver=overlay --scope=swarm --attachable -o "com.docker.network.bridge.enable_ip_masquerade"="false" database_network
 ```
-
-### Створення контейнера нової версії
-
-> [!IMPORTANT]
-> Для цого у вас потрiбен бути власний docker registry або аккаунт у docker hub
-
-Завантажте файли потрібної версії з mikbill і розмістіть їх у build/files
-Увійдіть у каталог збірки та виконайте команду:
-
-```
-docker build -t USERNAME/cabinet_api:VERSION -f container.dockerfile.
-docker push USERNAME/cabinet_api:VERSION
-```
