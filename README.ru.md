@@ -3,3 +3,7 @@
 [![ru](https://img.shields.io/badge/lang-ru-blue.svg)](https://github.com/Nekkoy/docker_mikbill/blob/main/README.ru.md)
 
 Неофициальный способ запуска [mikbill](https://mikbill.pro) в среде докера
+
+
++ compose - решение для одного сервера
++ swarm - кластерная версия
