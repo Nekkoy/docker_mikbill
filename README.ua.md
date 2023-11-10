@@ -6,3 +6,6 @@
 
 + compose - односерверне рішення
 + swarm - кластерна версія
+
+[Створіть власні контейнери](https://github.com/Nekkoy/docker_mikbill_containers)<br>
+[Docker hub](https://hub.docker.com/repositories/nekkoy)
