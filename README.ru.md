@@ -4,9 +4,8 @@
 
 Неофициальный способ запуска [mikbill](https://mikbill.pro) в среде докера
 
-
-+ compose - решение для одного сервера
-+ swarm - кластерная версия
++ [compose](compose/README.md) - решение для одного сервера
++ [swarm](swarm/README.md) - кластерная версия
 
 [Создавайте собственные контейнеры](https://github.com/Nekkoy/docker_mikbill_containers)<br>
 [Docker Hub](https://hub.docker.com/repositories/nekkoy)
