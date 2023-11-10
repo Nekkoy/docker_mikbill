@@ -6,7 +6,7 @@ Cabinet API for creating your own subscriber interface/telegram bot
 
 docker-compose.yaml consists of
  + cabinetapi_nginx - accepting web requests and redirecting them to the backend
- + cabinetapi_php - processes a request from admin_nginx
+ + cabinetapi_php - processes a request from cabinetapi_nginx
 
 ### Configuration
  + files/nginx/site.conf - nginx host config
