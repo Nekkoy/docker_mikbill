@@ -7,3 +7,6 @@
 
 + compose - решение для одного сервера
 + swarm - кластерная версия
+
+[Создавайте собственные контейнеры](https://github.com/Nekkoy/docker_mikbill_containers)<br>
+[Docker Hub](https://hub.docker.com/repositories/nekkoy)
