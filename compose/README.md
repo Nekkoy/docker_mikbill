@@ -10,7 +10,7 @@ Single server solution<br>
 Directory where you need to place the license files
 
 ### [Database](database/README.md)
-Percona XtraDB Cluster with GarBD (Galera Arbitrator)
+Percona Server 8.0
 
 ### [Admin](admin/README.md)
 Module includes an employee interface for managing billing and subscribers
