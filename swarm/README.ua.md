@@ -2,6 +2,18 @@
 [![ua](https://img.shields.io/badge/lang-ua-yellow.svg)](README.ua.md)
 [![ru](https://img.shields.io/badge/lang-ru-blue.svg)](README.ru.md)
 
+Це рішення використовувалося на двох фізичних серверах, об’єднаних в один кластер через docker swarm<br>
+У проекті брали участь 5 вузлів
+   + mb-адмін
+   + mb-auth
+   + mb-база даних
+   + мб-лк
+   + mb-платежі
+
+Продукт mikbill був розділений на модулі
+
+# Список модулів
+
 ### [Ліцензія](license/README.md)
 Каталог, куди потрібно розмістити файли ліцензії
 
