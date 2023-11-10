@@ -14,7 +14,7 @@ docker-compose.yaml consists of
  + files/nginx/ssl/fullchain.pem - SSL certificat
  + files/nginx/ssl/privkey.pem - SSL key
  + files/php/php.ini - php settings for admin_php
- + files/php/www.conf - php-fpm settings for admin_php
+ + files/php/www<span>.conf - php-fpm settings for admin_php
 
 ### Networks
 
