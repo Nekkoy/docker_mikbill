@@ -2,6 +2,18 @@
 [![ua](https://img.shields.io/badge/lang-ua-yellow.svg)](README.ua.md)
 [![ru](https://img.shields.io/badge/lang-ru-blue.svg)](README.ru.md)
 
+Это решение было использовано на двух физиологических серверах, комбинированных в один cluster via docker swarm<br>
+5 nodes включенных в проект
+   + mb-admin
+   + mb-auth
+   + mb-database
+   + mb-lk
+   + mb-payments
+
+The mikbill product has been divided into modules
+
+# List of Modules
+
 ### [Лицензия](license/README.md)
 Каталог, в котором необходимо разместить файлы лицензий
 
