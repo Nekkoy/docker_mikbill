@@ -1,4 +1,0 @@
-expiration {
-	reply-message = "Password Has Expired\r\n" 
-	#reply-message = "Your account has expired, %{User-Name}\r\n"
-}

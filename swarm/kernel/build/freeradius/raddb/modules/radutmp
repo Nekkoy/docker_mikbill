@@ -1,9 +1,0 @@
-radutmp {
-	filename = ${logdir}/radutmp
-	#  You may want instead: %{Stripped-User-Name:-%{User-Name}}
-	username = %{User-Name}
-	case_sensitive = yes
-	check_with_nas = yes
-	permission = 0600
-	caller_id = "yes"
-}

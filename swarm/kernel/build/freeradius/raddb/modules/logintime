@@ -1,6 +1,0 @@
-logintime {
-	reply-message = "You are calling outside your allowed timespan\r\n"
-	#reply-message = "Outside allowed timespan (%{control:Login-Time}), %{User-Name}\r\n"
-	minimum_timeout = 60
-}
-

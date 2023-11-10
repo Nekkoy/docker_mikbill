@@ -1,8 +1,0 @@
-detail {
-	filename = ${radacctdir}/%{Client-IP-Address}/detail-%Y%m%d
-	permission = 0600
-	header = "%t"
-	suppress {
-	    User-Password
-	}
-}
