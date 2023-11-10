@@ -4,5 +4,5 @@
 
 Unofficial way to run [mikbill](https://mikbill.pro) in docker environment
 
-
-
++ compose - single server solution
++ swarm - cluster version
