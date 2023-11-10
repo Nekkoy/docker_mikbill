@@ -33,6 +33,6 @@ docker network create --driver=overlay --scope=swarm --attachable -o "com.docker
 Завантажте файли потрібної версії з mikbill і розмістіть їх у build/files<br>
 Увійдіть у каталог збірки та виконайте команду:
 ```
-docker build -t ІМ'Я КОРИСТУВАЧА/admin:VERSION -f container.dockerfile.
+docker build -t USERNAME/admin:VERSION -f container.dockerfile.
 docker push USERNAME/admin:VERSION
 ```
