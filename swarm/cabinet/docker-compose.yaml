@@ -1,0 +1,100 @@
+version: "3.9"
+
+services:
+  cabinet_nginx:
+    image: nginx:stable-alpine
+    ports:
+      - published: 80
+        target: 80
+        mode: host
+      - published: 443
+        target: 443
+        mode: host
+    volumes:
+      - cabinet_files:/var/www/mikbill/stat:ro
+    configs:
+      - source: cabinet_nginx_site
+        target: /etc/nginx/conf.d/default.conf
+      - source: cabinet_nginx_ssl_cert
+        target: /etc/nginx/ssl/fullchain.pem
+      - source: cabinet_nginx_ssl_key
+        target: /etc/nginx/ssl/privkey.pem
+    environment:
+      - TZ=Europe/Kiev
+    networks:
+      cabinet_network: {}
+    deploy:
+      placement:
+        constraints:
+          - node.hostname==mb-lk
+
+  cabinet_redis:
+    image: redis:alpine3.18
+    environment:
+      - TZ=Europe/Kiev
+    networks:
+      cabinet_network: {}
+    deploy:
+      placement:
+        constraints:
+          - node.hostname==mb-lk
+
+  cabinet_php:
+    image: nekkoy/cabinet:latest
+    environment:
+      - TZ=Europe/Kiev
+      - MIKBILL_MYSQL_HOST=mysql_balancer
+      - MIKBILL_MYSQL_USERNAME=mikbill
+      - MIKBILL_MYSQL_PASSWORD=mikbill
+      - MIKBILL_MYSQL_DATABASE=mikbill
+      - MIKBILL_MYSQL_CHARSET=utf8mb4
+      - MIKBILL_DEBUG=false
+      - MIKBILL_ERROR_LOG=/var/log/mikbill/stat/general.log
+      - MIKBILL_DEBUG_LOG=/var/log/mikbill/stat/debug.log
+    volumes:
+      - cabinet_files:/var/www/mikbill/stat
+    configs:
+      - source: cabinet_php_ini
+        target: /usr/local/etc/php/php.ini
+      - source: cabinet_php_fpm
+        target: /usr/local/etc/php-fpm.d/www.conf
+      - source: mikbill_licence_key
+        target: /var/mikbill/license/client.key
+      - source: mikbill_licence_crt
+        target: /var/mikbill/license/serv.crt
+    networks:
+      database_network: {}
+      cabinet_network: {}
+    deploy:
+      mode: replicated
+      replicas: 5
+      placement:
+        constraints:
+          - node.hostname==mb-lk
+
+volumes:
+  cabinet_files:
+
+configs:
+  cabinet_nginx_site:
+    file: files/nginx/site.conf
+  cabinet_nginx_ssl_cert:
+    file: files/nginx/ssl/fullchain.pem
+  cabinet_nginx_ssl_key:
+    file: files/nginx/ssl/privkey.pem
+  cabinet_php_ini:
+    file: files/php/php.ini
+  cabinet_php_fpm:
+    file: files/php/www.conf
+  mikbill_licence_key:
+    file: ../license/client.key
+  mikbill_licence_crt:
+    file: ../license/serv.crt
+
+networks:
+  database_network:
+    external: true
+    name: database_network
+  cabinet_network:
+    external: true
+    name: cabinet_network

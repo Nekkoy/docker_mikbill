@@ -1,0 +1,9 @@
+preprocess {
+	huntgroups = ${confdir}/huntgroups
+#	hints = ${confdir}/hints
+	with_ascend_hack = no
+	ascend_channels_per_line = 23
+	with_ntdomain_hack = no
+	with_specialix_jetstream_hack = no
+	with_cisco_vsa_hack = no
+}

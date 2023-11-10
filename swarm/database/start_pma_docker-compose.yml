@@ -1,0 +1,18 @@
+version: '3.9'
+
+services:
+  phpmyadmin:
+    hostname: phpmyadmin
+    image: phpmyadmin/phpmyadmin:5.2.1
+    networks:
+      - database_network
+    ports:
+      - "8080:80"
+    environment:
+      - PMA_HOST=mysql_balancer
+      - PMA_PMAD=mikbill
+
+networks:
+  database_network:
+    external: true
+    name: database_network

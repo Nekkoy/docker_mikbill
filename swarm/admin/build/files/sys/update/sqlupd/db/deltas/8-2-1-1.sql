@@ -1,0 +1,19 @@
+SET NAMES 'utf8';
+
+CREATE TABLE addons_platezhka (
+  record_id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  terminal_date DATETIME DEFAULT NULL,
+  uid BIGINT(20) UNSIGNED DEFAULT NULL,
+  account VARCHAR(50) NOT NULL,
+  amount DOUBLE(14, 2) DEFAULT NULL,
+  payID VARCHAR(64) DEFAULT NULL,
+  transactionID BIGINT(20) UNSIGNED NOT NULL,
+  terminalID INT(11) DEFAULT NULL,
+  payElementID INT(11) NOT NULL,
+  `action` ENUM('check','pay','cancel') NOT NULL,
+  PRIMARY KEY (record_id)
+)
+ENGINE = MYISAM
+CHARACTER SET koi8r
+COLLATE koi8r_general_ci;

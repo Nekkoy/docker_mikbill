@@ -1,0 +1,52 @@
+
+version: '3.9'
+
+services:
+  node2:
+    hostname: node2
+    image: percona/percona-xtradb-cluster:8.0
+    networks:
+      - cluster_network
+    environment:
+      - TZ=Europe/Kiev
+      - CLUSTER_NAME=MikbillCluster
+      - MYSQL_ROOT_PASSWORD=mikbill
+      - MYSQL_ROOT_HOST=mysql_balancer
+      - MYSQL_USER=mikbill
+      - MYSQL_PASSWORD=mikbill
+      - MYSQL_DATABASE=mikbill
+      - CLUSTER_JOIN=arbitrator
+      - CLUSTER_ADDRESS=node1,node2,
+    volumes:
+      - ./scripts/init.sh:/init.sh
+      - ./certs:/certs
+      - cluster_node2:/var/lib/mysql
+    entrypoint: ["/init.sh"]
+    command: --default-time-zone='Europe/Kiev'
+    configs:
+      - source: cluster_node_config
+        target: /etc/node.cnf
+        uid: '1'
+        gid: '1'
+        mode: 0664
+    restart: unless-stopped
+    deploy:
+      placement:
+        constraints:
+          - node.hostname==mb-database
+
+configs:
+  cluster_node_config:
+    file: ./conf/node_cluster.cnf
+
+volumes:
+  cluster_node2:
+    driver_opts:
+      type: none
+      o: bind
+      device: /mnt/mysql-data/node2
+
+networks:
+  cluster_network:
+    external: true
+    name: cluster_network

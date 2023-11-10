@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  mysql_import:
+    build:
+      dockerfile: ./build/mysql_client.docker
+    env_file:
+      - .env
+    command: >
+      sh -c "cp -f /tmp/mikbill/mikbill.sql /tmp/mikbill/backup.sql && 
+             sed -i -e 's/_0900_ai_/_general_/g' -e 's/_unicode_/_general_/g' -e 's/utf8mb4/koi8r/g' -e 's/utf8mb3/koi8r/g' -e 's/utf8/koi8r/g' -e 's/koi8u/koi8r/g' -e 's/koi8r/utf8mb4/g' /tmp/mikbill/backup.sql &&
+             sed -i -e 's/╕/і/g' -e 's/╤/І/g' -e 's/╖/ї/g' -e 's/╥/Ї/g' -e 's/╓/є/g' -e 's/╢/Є/g' -e 's/╜/ґ/g' -e 's/╫/Ґ/g' /tmp/mikbill/backup.sql &&
+             sed -i -e 's/ENGINE=MyISAM/ENGINE=InnoDB/g' -e 's/ENGINE=MEMORY/ENGINE=InnoDB/g' /tmp/mikbill/backup.sql &&
+             mysql -h ${MYSQL_HOST} -u root -p${ROOT_PASSWORD} -e 'DROP DATABASE IF EXISTS ${MIKBILL_DATABASE}' &&
+             mysql -h ${MYSQL_HOST} -u root -p${ROOT_PASSWORD} -e 'CREATE DATABASE ${MIKBILL_DATABASE} CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci' &&
+             mysql -h ${MYSQL_HOST} -u root -p${ROOT_PASSWORD} ${MIKBILL_DATABASE} -e '\source /tmp/mikbill/backup.sql'"
+    networks:
+      cluster_network: {}
+    volumes:
+      - "./sql/mikbill.sql:/tmp/mikbill/mikbill.sql"
+
+networks:
+  cluster_network:
+    external: true
+    name: cluster_network

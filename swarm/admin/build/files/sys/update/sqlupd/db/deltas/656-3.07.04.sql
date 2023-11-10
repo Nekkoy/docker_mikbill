@@ -1,0 +1,29 @@
+--
+-- Отключение внешних ключей 
+--
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+
+SET NAMES 'utf8';
+
+CREATE TABLE `base_stations` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(128) NOT NULL,
+    `mac_address` VARCHAR(64) NULL DEFAULT NULL,
+    `azimuth` INT NULL DEFAULT NULL,
+    `raster_width` INT NULL DEFAULT NULL,
+    `tilt_angle` INT NULL DEFAULT NULL,
+    `power` INT NULL DEFAULT NULL,
+    `frequency` INT NULL DEFAULT NULL,
+    `latitude` VARCHAR(128) NULL DEFAULT NULL,
+    `longitude` INT(128) NULL DEFAULT NULL,
+    `projection_type` INT NULL DEFAULT NULL,
+    `houseid` INT NULL DEFAULT NULL,
+    `housingid` INT NULL DEFAULT NULL,
+    `houseblockid` INT NULL DEFAULT NULL,
+    `porch` INT NULL DEFAULT NULL,
+    `floor` INT NULL DEFAULT NULL,
+    `app` VARCHAR(128) NULL DEFAULT NULL,
+    PRIMARY KEY(`id`)
+) ENGINE = INNODB;
+
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

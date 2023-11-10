@@ -1,0 +1,100 @@
+version: "3.9"
+
+services:
+  freeradius_nginx:
+    image: nginx:stable-alpine
+    configs:
+      - source: kernel_nginx_config
+        target: /etc/nginx/nginx.conf
+    environment:
+      - TZ=Europe/Kiev
+    networks:
+      freeradius_network: {}
+    ports:
+      - published: 1812
+        target: 1812
+        protocol: udp
+        mode: host
+      - published: 1813
+        target: 1813
+        protocol: udp
+        mode: host
+    deploy:
+      placement:
+        constraints:
+          - node.hostname==mb-auth
+
+  radius_server:
+    image: nekkoy/freeradius:3
+    environment:
+      - TZ=Europe/Kiev
+      - MIKBILL_KERNEL_HOST=mikbill_kernel
+      - MIKBILL_KERNEL_PORT=22007
+      - MIKBILL_MYSQL_HOST=mysql_balancer
+      - MIKBILL_MYSQL_USERNAME=mikbill
+      - MIKBILL_MYSQL_PASSWORD=mikbill
+      - MIKBILL_MYSQL_DATABASE=mikbill
+    command: freeradius -f
+    configs:
+      - source: radius_sql_config
+        target: /etc/freeradius/3.0/sql.conf
+    networks:
+      freeradius_network: {}
+      kernel_network: {}
+      database_network: {}
+    deploy:
+      mode: replicated
+      replicas: 3
+      placement:
+        constraints:
+          - node.hostname==mb-auth
+
+  mikbill_kernel:
+    image: nekkoy/kernel:latest
+    environment:
+      - TZ=Europe/Kiev
+      - MIKBILL_KERNEL_IP=0.0.0.0
+      - MIKBILL_KERNEL_PORT=22007
+      - MIKBILL_KERNEL_PID=/var/run/mikbill.pid
+      - MIKBILL_KERNEL_LOG=/var/log/mikbill.log
+      - MIKBILL_MYSQL_HOST=mysql_balancer
+      - MIKBILL_MYSQL_USERNAME=mikbill
+      - MIKBILL_MYSQL_PASSWORD=mikbill
+      - MIKBILL_MYSQL_DATABASE=mikbill
+      - MIKBILL_MYSQL_CHARSET=utf8mb4
+      - MIKBILL_DEBUG=false
+    configs:
+      - source: mikbill_licence_key
+        target: /var/mikbill/license/client.key
+      - source: mikbill_licence_crt
+        target: /var/mikbill/license/serv.crt
+    networks:
+      database_network: {}
+      kernel_network: {}
+    deploy:
+      mode: replicated
+      replicas: 3
+      placement:
+        constraints:
+          - node.hostname==mb-auth
+
+configs:
+  kernel_nginx_config:
+    file: files/nginx.conf
+  radius_sql_config:
+    file: files/sql.conf
+  mikbill_licence_key:
+    file: ../license/client.key
+  mikbill_licence_crt:
+    file: ../license/serv.crt
+
+networks:
+  freeradius_network:
+    external: true
+    name: freeradius_network
+  kernel_network:
+    external: true
+    name: kernel_network
+  database_network:
+    external: true
+    name: database_network

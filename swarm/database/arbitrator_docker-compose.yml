@@ -1,0 +1,20 @@
+version: '3.9'
+
+services:
+  arbitrator:
+    hostname: arbitrator
+    build:
+      dockerfile: ./build/arbitrator.docker # https://docs.percona.com/percona-xtradb-cluster/8.0/release-notes/8.0.33-25.upd.html
+    command: garbd -g "MikbillCluster" -a "gcomm://node1,node2," -o "evs.keepalive_period=PT3S;evs.inactive_check_period=PT10S;evs.suspect_timeout=PT30S;evs.inactive_timeout=PT1M;evs.install_timeout=PT1M"
+    networks:
+      - cluster_network
+    restart: unless-stopped
+    deploy:
+      placement:
+        constraints:
+          - node.hostname==mb-database
+
+networks:
+  cluster_network:
+    external: true
+    name: cluster_network

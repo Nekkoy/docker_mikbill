@@ -1,0 +1,5 @@
+radutmp sradutmp {
+	filename = ${logdir}/sradutmp
+	permission = 0644
+	caller_id = "yes"
+}

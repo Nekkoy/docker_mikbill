@@ -1,0 +1,74 @@
+version: "3.9"
+
+services:
+  payment_nginx:
+    image: nginx:stable-alpine
+    environment:
+      - TZ=Europe/Kiev
+    ports:
+      - published: 80
+        target: 80
+        mode: host
+      - published: 443
+        target: 443
+        mode: host
+    volumes:
+      - payments_files:/var/www/mikbill/admin:ro
+    configs:
+      - source: payment_nginx_site
+        target: /etc/nginx/conf.d/default.conf
+      - source: payment_nginx_ssl_cert
+        target: /etc/nginx/conf.d/ssl/fullchain.pem
+      - source: payment_nginx_ssl_key
+        target: /etc/nginx/conf.d/ssl/privkey.pem
+    networks:
+      payments_network: {}
+    deploy:
+      placement:
+        constraints:
+          - node.hostname==mb-payments
+
+  payment_php:
+    image: nekkoy/payments:latest
+    environment:
+      - TZ=Europe/Kiev
+      - MIKBILL_MYSQL_HOST=mysql_balancer
+      - MIKBILL_MYSQL_USERNAME=mikbill
+      - MIKBILL_MYSQL_PASSWORD=mikbill
+      - MIKBILL_MYSQL_DATABASE=mikbill
+      - MIKBILL_MYSQL_CHARSET=utf8mb4
+      - MIKBILL_DEBUG=false
+      - MIKBILL_ERROR_LOG=/var/log/mikbill_general.log
+      - MIKBILL_DEBUG_LOG=/var/log/mikbill_debug.log
+    volumes:
+      - payments_files:/var/www/mikbill/admin
+    networks:
+      database_network: {}
+      payments_network: {}
+    deploy:
+      placement:
+        constraints:
+          - node.hostname==mb-payments
+
+volumes:
+  payments_files:
+
+configs:
+  payment_nginx_site:
+    file: files/nginx/site.conf
+  payment_nginx_ssl_cert:
+    file: files/nginx/ssl/fullchain.pem
+  payment_nginx_ssl_key:
+    file: files/nginx/ssl/privkey.pem
+  mikbill_licence_key:
+    file: ../license/client.key
+  mikbill_licence_crt:
+    file: ../license/serv.crt
+
+networks:
+  database_network:
+    external: true
+    name: database_network
+  payments_network:
+    external: true
+    name: payments_network

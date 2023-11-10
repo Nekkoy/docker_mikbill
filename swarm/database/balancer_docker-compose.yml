@@ -1,0 +1,27 @@
+version: '3.9'
+
+services:
+  mysql_balancer:
+    image: nginx:1.25.2
+    networks:
+      - database_network
+      - cluster_network
+    ports:
+      - target: 3306
+        published: 3306
+        mode: host
+    volumes:
+      - ./conf/balancer.conf:/etc/nginx/nginx.conf
+    restart: unless-stopped
+    deploy:
+      placement:
+        constraints:
+          - node.hostname==mb-database
+
+networks:
+  cluster_network:
+    external: true
+    name: cluster_network
+  database_network:
+    external: true
+    name: database_network

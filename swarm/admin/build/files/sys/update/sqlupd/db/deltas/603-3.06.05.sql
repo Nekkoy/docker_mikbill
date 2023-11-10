@@ -1,0 +1,10 @@
+--
+-- Отключение внешних ключей 
+--
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+
+SET NAMES 'utf8';
+
+ALTER TABLE `switche_type` CHANGE `numports` `numports` CHAR(6) CHARACTER SET koi8r COLLATE koi8r_general_ci NOT NULL DEFAULT '24';
+
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

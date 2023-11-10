@@ -1,0 +1,25 @@
+detail auth_log {
+	filename = ${radacctdir}/%{Client-IP-Address}/auth-detail-%Y%m%d
+	permission = 0600
+	suppress {
+		User-Password
+	}
+}
+
+detail reply_log {
+	filename = ${radacctdir}/%{Client-IP-Address}/reply-detail-%Y%m%d
+	permission = 0600
+}
+
+detail pre_proxy_log {
+	filename = ${radacctdir}/%{Client-IP-Address}/pre-proxy-detail-%Y%m%d
+	permission = 0600
+	suppress {
+		 User-Password
+	}
+}
+
+detail post_proxy_log {
+	filename = ${radacctdir}/%{Client-IP-Address}/post-proxy-detail-%Y%m%d
+	permission = 0600
+}
