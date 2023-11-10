@@ -27,7 +27,7 @@ docker network create --driver=overlay --scope=swarm --attachable -o "com.docker
 
 ### Створення контейнера нової версії
 
-> [!ВАЖЛИВО]
+> [!IMPORTANT]
 > Для цого у вас потрiбен бути власний docker registry або аккаунт у docker hub
 
 Завантажте файли потрібної версії з mikbill і розмістіть їх у build/files<br>
