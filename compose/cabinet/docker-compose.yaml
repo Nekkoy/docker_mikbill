@@ -1,47 +1,43 @@
 version: "3.9"
 
 services:
-  cabinetapi_nginx:
+  cabinet_nginx:
     image: nginx:stable-alpine
     environment:
       - TZ=Europe/Kiev
     ports:
-      - published: 80
+      - published: 88
         target: 80
         mode: host
-      - published: 443
+      - published: 444
         target: 443
         mode: host
     volumes:
-      -  cabinetapi_files:/var/www/cabinetapi:ro
+      - cabinet_files:/var/www/mikbill/stat:ro
     configs:
-      - source: cabinetapi_nginx_site
+      - source: cabinet_nginx_site
         target: /etc/nginx/conf.d/default.conf
-      - source: cabinetapi_nginx_ssl_cert
+      - source: cabinet_nginx_ssl_cert
         target: /etc/nginx/conf.d/ssl/fullchain.pem
-      - source: cabinetapi_nginx_ssl_key
+      - source: cabinet_nginx_ssl_key
         target: /etc/nginx/conf.d/ssl/privkey.pem
     networks:
-      cabinetapi_network: {}
-    deploy:
-      placement:
-        constraints:
-          - node.hostname==mb-payments
+      cabinet_network: {}
 
-  cabinetapi_php:
-    image: nekkoy/cabinet_api:latest
+  cabinet_php:
+    image: nekkoy/cabinet:latest
     environment:
       - TZ=Europe/Kiev
-      - MIKBILL_MYSQL_HOST=mysql_balancer
+      - MIKBILL_MYSQL_HOST=mysql
       - MIKBILL_MYSQL_USERNAME=mikbill
       - MIKBILL_MYSQL_PASSWORD=mikbill
       - MIKBILL_MYSQL_DATABASE=mikbill
       - MIKBILL_MYSQL_CHARSET=utf8mb4
       - MIKBILL_DEBUG=false
-      - MIKBILL_ERROR_LOG=/var/log/mikbill_general.log
-      - MIKBILL_DEBUG_LOG=/var/log/mikbill_debug.log
+      - MIKBILL_ERROR_LOG=/var/log/mikbill/stat/general.log
+      - MIKBILL_DEBUG_LOG=/var/log/mikbill/stat/debug.log
     volumes:
-      - cabinetapi_files:/var/www/cabinetapi
+      - cabinet_files:/var/www/mikbill/stat
     configs:
       - source: mikbill_licence_key
         target: /var/mikbill/license/client.key
@@ -49,21 +45,17 @@ services:
         target: /var/mikbill/license/serv.crt
     networks:
       database_network: {}
-      cabinetapi_network: {}
-    deploy:
-      placement:
-        constraints:
-          - node.hostname==mb-payments
+      cabinet_network: {}
 
 volumes:
-  cabinetapi_files:
+  cabinet_files:
 
 configs:
-  cabinetapi_nginx_site:
+  cabinet_nginx_site:
     file: files/nginx/site.conf
-  cabinetapi_nginx_ssl_cert:
+  cabinet_nginx_ssl_cert:
     file: files/nginx/ssl/fullchain.pem
-  cabinetapi_nginx_ssl_key:
+  cabinet_nginx_ssl_key:
     file: files/nginx/ssl/privkey.pem
   mikbill_licence_key:
     file: ../license/client.key
@@ -74,6 +66,6 @@ networks:
   database_network:
     external: true
     name: database_network
-  cabinetapi_network:
+  cabinet_network:
     external: true
-    name: cabinetapi_network
+    name: cabinet_network

@@ -1,0 +1,66 @@
+version: "3.9"
+
+services:
+  radius_server:
+    image: nekkoy/freeradius:3
+    environment:
+      - TZ=Europe/Kiev
+      - MIKBILL_KERNEL_HOST=mikbill_kernel
+      - MIKBILL_KERNEL_PORT=22007
+      - MIKBILL_MYSQL_HOST=mysql
+      - MIKBILL_MYSQL_USERNAME=mikbill
+      - MIKBILL_MYSQL_PASSWORD=mikbill
+      - MIKBILL_MYSQL_DATABASE=mikbill
+    command: freeradius -f
+    ports:
+      - published: 1812
+        target: 1812
+        protocol: udp
+      - published: 1813
+        target: 1813
+        protocol: udp
+    configs:
+      - source: radius_sql_config
+        target: /etc/freeradius/3.0/sql.conf
+    networks:
+      kernel_network: {}
+      database_network: {}
+
+  mikbill_kernel:
+    image: nekkoy/kernel:latest
+    environment:
+      - TZ=Europe/Kiev
+      - MIKBILL_KERNEL_IP=0.0.0.0
+      - MIKBILL_KERNEL_PORT=22007
+      - MIKBILL_KERNEL_PID=/var/run/mikbill.pid
+      - MIKBILL_KERNEL_LOG=/var/log/mikbill.log
+      - MIKBILL_MYSQL_HOST=mysql
+      - MIKBILL_MYSQL_USERNAME=mikbill
+      - MIKBILL_MYSQL_PASSWORD=mikbill
+      - MIKBILL_MYSQL_DATABASE=mikbill
+      - MIKBILL_MYSQL_CHARSET=utf8mb4
+      - MIKBILL_DEBUG=false
+    configs:
+      - source: mikbill_licence_key
+        target: /var/mikbill/license/client.key
+      - source: mikbill_licence_crt
+        target: /var/mikbill/license/serv.crt
+    networks:
+      database_network: {}
+      kernel_network: {}
+
+configs:
+  radius_sql_config:
+    file: files/sql.conf
+  mikbill_licence_key:
+    file: ../license/client.key
+  mikbill_licence_crt:
+    file: ../license/serv.crt
+
+networks:
+  kernel_network:
+    external: true
+    name: kernel_network
+  database_network:
+    external: true
+    name: database_network

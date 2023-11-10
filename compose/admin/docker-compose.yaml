@@ -1,10 +1,8 @@
 version: "3.9"
 
 services:
-  cabinetapi_nginx:
+  admin_nginx:
     image: nginx:stable-alpine
-    environment:
-      - TZ=Europe/Kiev
     ports:
       - published: 80
         target: 80
@@ -13,26 +11,24 @@ services:
         target: 443
         mode: host
     volumes:
-      -  cabinetapi_files:/var/www/cabinetapi:ro
+      - admin_files:/var/www/mikbill/admin:ro
     configs:
-      - source: cabinetapi_nginx_site
+      - source: admin_nginx_site
         target: /etc/nginx/conf.d/default.conf
-      - source: cabinetapi_nginx_ssl_cert
+      - source: admin_nginx_ssl_cert
         target: /etc/nginx/conf.d/ssl/fullchain.pem
-      - source: cabinetapi_nginx_ssl_key
+      - source: admin_nginx_ssl_key
         target: /etc/nginx/conf.d/ssl/privkey.pem
-    networks:
-      cabinetapi_network: {}
-    deploy:
-      placement:
-        constraints:
-          - node.hostname==mb-payments
-
-  cabinetapi_php:
-    image: nekkoy/cabinet_api:latest
     environment:
       - TZ=Europe/Kiev
-      - MIKBILL_MYSQL_HOST=mysql_balancer
+    networks:
+      admin_network: {}
+
+  admin_php:
+    image: nekkoy/admin:latest
+    environment:
+      - TZ=Europe/Kiev
+      - MIKBILL_MYSQL_HOST=mysql
       - MIKBILL_MYSQL_USERNAME=mikbill
       - MIKBILL_MYSQL_PASSWORD=mikbill
       - MIKBILL_MYSQL_DATABASE=mikbill
@@ -41,7 +37,7 @@ services:
       - MIKBILL_ERROR_LOG=/var/log/mikbill_general.log
       - MIKBILL_DEBUG_LOG=/var/log/mikbill_debug.log
     volumes:
-      - cabinetapi_files:/var/www/cabinetapi
+      - admin_files:/var/www/mikbill/admin
     configs:
       - source: mikbill_licence_key
         target: /var/mikbill/license/client.key
@@ -49,21 +45,17 @@ services:
         target: /var/mikbill/license/serv.crt
     networks:
       database_network: {}
-      cabinetapi_network: {}
-    deploy:
-      placement:
-        constraints:
-          - node.hostname==mb-payments
+      admin_network: {}
 
 volumes:
-  cabinetapi_files:
+  admin_files:
 
 configs:
-  cabinetapi_nginx_site:
+  admin_nginx_site:
     file: files/nginx/site.conf
-  cabinetapi_nginx_ssl_cert:
+  admin_nginx_ssl_cert:
     file: files/nginx/ssl/fullchain.pem
-  cabinetapi_nginx_ssl_key:
+  admin_nginx_ssl_key:
     file: files/nginx/ssl/privkey.pem
   mikbill_licence_key:
     file: ../license/client.key
@@ -74,6 +66,6 @@ networks:
   database_network:
     external: true
     name: database_network
-  cabinetapi_network:
+  admin_network:
     external: true
-    name: cabinetapi_network
+    name: admin_network

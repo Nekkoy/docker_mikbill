@@ -1,0 +1,34 @@
+version: "3.9"
+
+services:
+  exec_module:
+    image: nekkoy/exec:latest
+    environment:
+      - TZ=Europe/Kiev
+      - MIKBILL_MYSQL_HOST=mysql
+      - MIKBILL_MYSQL_USERNAME=mikbill
+      - MIKBILL_MYSQL_PASSWORD=mikbill
+      - MIKBILL_MYSQL_DATABASE=mikbill
+      - MIKBILL_MYSQL_CHARSET=utf8mb4
+      - MIKBILL_DEBUG=false
+      - MIKBILL_ERROR_LOG=/var/log/mikbill_general.log
+      - MIKBILL_DEBUG_LOG=/var/log/mikbill_debug.log
+    volumes:
+      - exec_scripts:/var/mikbill/prod/scripts
+    configs:
+      - source: exec_crontab
+        target: /etc/cron.d/mikbill
+    networks:
+      database_network: {}
+
+volumes:
+  exec_scripts:
+
+configs:
+  exec_crontab:
+    file: crontab
+
+networks:
+  database_network:
+    external: true
+    name: database_network

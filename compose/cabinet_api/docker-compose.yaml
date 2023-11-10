@@ -6,10 +6,10 @@ services:
     environment:
       - TZ=Europe/Kiev
     ports:
-      - published: 80
+      - published: 8080
         target: 80
         mode: host
-      - published: 443
+      - published: 446
         target: 443
         mode: host
     volumes:
@@ -23,16 +23,12 @@ services:
         target: /etc/nginx/conf.d/ssl/privkey.pem
     networks:
       cabinetapi_network: {}
-    deploy:
-      placement:
-        constraints:
-          - node.hostname==mb-payments
 
   cabinetapi_php:
     image: nekkoy/cabinet_api:latest
     environment:
       - TZ=Europe/Kiev
-      - MIKBILL_MYSQL_HOST=mysql_balancer
+      - MIKBILL_MYSQL_HOST=mysql
       - MIKBILL_MYSQL_USERNAME=mikbill
       - MIKBILL_MYSQL_PASSWORD=mikbill
       - MIKBILL_MYSQL_DATABASE=mikbill
@@ -50,10 +46,6 @@ services:
     networks:
       database_network: {}
       cabinetapi_network: {}
-    deploy:
-      placement:
-        constraints:
-          - node.hostname==mb-payments
 
 volumes:
   cabinetapi_files:

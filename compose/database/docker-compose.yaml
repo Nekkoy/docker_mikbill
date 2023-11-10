@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+  mysql:
+    image: percona/percona-server:8.0
+    environment:
+      - TZ=Europe/Kiev
+      - MYSQL_ROOT_PASSWORD=mikbill
+      - MYSQL_ROOT_HOST=%
+      - MYSQL_USER=mikbill
+      - MYSQL_PASSWORD=mikbill
+      - MYSQL_DATABASE=mikbill
+    ports:
+      - published: 3306
+        target: 3306
+    volumes:
+      - mysql_volume:/var/lib/mysql
+    configs:
+      - source: database_config
+        target: /etc/my.cnf
+        uid: '1'
+        gid: '1'
+        mode: 0444
+    networks:
+      database_network: {}
+
+volumes:
+  mysql_volume:
+
+configs:
+  database_config:
+    file: files/my.cnf
+
+networks:
+  database_network:
+    external: true
+    name: database_network
