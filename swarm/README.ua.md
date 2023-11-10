@@ -5,7 +5,7 @@
 ### [Ліцензія](license/README.md)
 Каталог, куди потрібно розмістити файли ліцензії
 
-### [База даних](база даних/README.md)
+### [База даних](database/README.md)
 Кластер Percona XtraDB з GarBD (арбітр Galera)
 
 ### [Адміністратор](admin/README.md)
