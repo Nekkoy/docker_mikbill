@@ -4,6 +4,12 @@
 
 Percona XtraDB Cluster with GarBD (Galera Arbitrator)
 
+Required networks:
+```
+docker network create --driver=overlay --scope=swarm --attachable -o "com.docker.network.bridge.enable_ip_masquerade"="false" cluster_network
+docker network create --driver=overlay --scope=swarm --attachable -o "com.docker.network.bridge.enable_ip_masquerade"="false" database_network
+```
+
 In what order should you start the cluster:
   + init_cluster_docker-compose.yml - will create the cluster itself using volume from node1
   + arbitrator_docker-compose.yml - We raise an arbiter to control the cluster

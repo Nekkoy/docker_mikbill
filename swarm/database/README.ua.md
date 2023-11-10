@@ -4,6 +4,12 @@
 
 Кластер Percona XtraDB з GarBD (арбітр Galera)
 
+Необхідні мережі:
+```
+docker network create --driver=overlay --scope=swarm --attachable -o "com.docker.network.bridge.enable_ip_masquerade"="false" cluster_network
+docker network create --driver=overlay --scope=swarm --attachable -o "com.docker.network.bridge.enable_ip_masquerade"="false" database_network
+```
+
 У якому порядку слід запускати кластер:
    + init_cluster_docker-compose.yml - створить сам кластер, використовуючи том з node1
    + arbitrator_docker-compose.yml - Ми створюємо арбітра для управління кластером
