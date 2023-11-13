@@ -19,7 +19,6 @@ services:
     networks:
       - cluster_network
     entrypoint: ["/init.sh"]
-    command: --default-time-zone='Europe/Kiev'
     configs:
       - source: cluster_init_script
         target: /init.sh
